@@ -1,20 +1,22 @@
-function potenciawithoutfilterandmap(){
-    r=0;
-    suma=0;
-    p=2;
-    a=0;
-    for (var x = 0; r < 10; x++) {
-        a = x;
-        var r = Math.pow(p, a);
-        suma=suma+r;
-        console.log(r)
-        a=x+1;
+function potenciawithoutfilterandmap() {
 
-    }
-    console.log(suma)
+    const input = [1, 2, 3, 4, 5];
+
+    const pot = input.map(function (num) {
+        return Math.pow(num, 2);
+    });
+    const pots = pot.filter((num) => num < 10);
+    const initialValue = 0;
+    const sumWithInitial = pots.reduce(
+        (accumulator, currentValue) => accumulator + currentValue,
+        initialValue
+    );
+
+    console.log(pots);
+    console.log(sumWithInitial);
+
 }
-
-potenciawithoutfilterandmap();
+    potenciawithoutfilterandmap();
 
 
 
