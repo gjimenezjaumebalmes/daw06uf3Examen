@@ -34,14 +34,14 @@ export let pilota = {
     dy: -velocitatPilota
 };
 
-function collides(obj1, obj2) {
+export function collides(obj1, obj2) {
     return obj1.x < obj2.x + obj2.amplada &&
         obj1.x + obj1.amplada > obj2.x &&
         obj1.y < obj2.y + obj2.alçada &&
         obj1.y + obj1.alçada > obj2.y;
 }
 
-function loop() {
+export function loop() {
     requestAnimationFrame(loop);
     context.clearRect(0,0,canvas.width,canvas.height);
 
@@ -106,15 +106,6 @@ function loop() {
     for (let i = graella; i < canvas.height - graella; i += graella * 2) {
         context.fillRect(canvas.width / 2 - graella / 2, i, graella, graella);
     }
-
-}
-
-
-export function collides(){
-
-}
-
-export function loop(){
 
 }
 
