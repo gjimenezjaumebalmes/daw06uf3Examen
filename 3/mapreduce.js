@@ -3,7 +3,7 @@ function potenciawithoutfilterandmap() {
     const input = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
     const pot = input.map(function (num) {
-        return Math.pow(num, 2);
+        return Math.pow(2, num);
     });
     const pots = pot.filter((num) => num < 10);
     const initialValue = 0;

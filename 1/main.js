@@ -1,4 +1,4 @@
-export { all } from "pong.js";
+import { all } from "pong.js";
 import "pong.js";
 // import canvas from "pong.js";
 // import context from "pong.js";
