@@ -11,8 +11,8 @@ import "pong.js";
 // import paddleSpeed from "pong.js";
 // import pilota from "pong.js";
 
-collides();
-loop();
+call.collides(obj1, obj2);
+call.loop();
 requestAnimationFrame(loop);
 
 

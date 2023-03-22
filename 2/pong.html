@@ -20,30 +20,37 @@
 <body>
 <canvas width="750" height="580" id="joc"></canvas>
 <script>
-  let canvas = document.getElementById('joc');
-  let context = canvas.getContext('2d');
-  let graella = 15;
-  let alçadaPala = graella * 5;
-  let maximPalaY = canvas.height - graella - alçadaPala;
+  // Obtenemos el elemento canvas y el contexto 2D
+  const canvas = document.getElementById('joc');
+  const context = canvas.getContext('2d');
 
-  var paddleSpeed = 6;
-  var velocitatPilota = 5;
+  // Definimos algunas constantes para las dimensiones de las paletas y la rejilla
+  const graella = 15;
+  const alçadaPala = graella * 5;
+  const maximPalaY = canvas.height - graella - alçadaPala;
 
-  let palaEsquerra = {
+  // Velocidades de la pala y la pelota
+  const paddleSpeed = 6;
+  const velocitatPilota = 5;
+
+  // Creamos los objetos para las dos paletas y la pelota
+  const palaEsquerra = {
     x: graella * 2,
     y: canvas.height / 2 - alçadaPala / 2,
     amplada: graella,
     alçada: alçadaPala,
+    dy: 0 // velocidad vertical actual de la pala
   };
 
-  let palaDreta = {
+  const palaDreta = {
     x: canvas.width - graella * 3,
     y: canvas.height / 2 - alçadaPala / 2,
     amplada: graella,
     alçada: alçadaPala,
+    dy: 0 // velocidad vertical actual de la pala
   };
 
-  let pilota = {
+  const pilota = {
     x: canvas.width / 2,
     y: canvas.height / 2,
     amplada: graella,
@@ -55,6 +62,7 @@
     dy: -velocitatPilota
   };
 
+  // Función que detecta colisiones entre dos objetos rectangulares
   function collides(obj1, obj2) {
     return obj1.x < obj2.x + obj2.amplada &&
             obj1.x + obj1.amplada > obj2.x &&
@@ -62,75 +70,86 @@
             obj1.y + obj1.alçada > obj2.y;
   }
 
+  // Función que se llama en cada fotograma para dibujar los elementos y actualizar la posición de las paletas
   function loop() {
-    requestAnimationFrame(loop);
-    context.clearRect(0,0,canvas.width,canvas.height);
+    // Borramos todo el contenido del canvas antes de dibujar el nuevo fotograma
+    context.clearRect(0, 0, canvas.width, canvas.height);
 
-
-    if (palaEsquerra.y < graella) {
-      palaEsquerra.y = graella;
-    }
-    else if (palaEsquerra.y > maximPalaY) {
-      palaEsquerra.y = maximPalaY;
-    }
-
-    if (palaDreta.y < graella) {
-      palaDreta.y = graella;
-    }
-    else if (palaDreta.y > maximPalaY) {
-      palaDreta.y = maximPalaY;
-    }
-
+    // Dibujamos las dos paletas en sus posiciones actuales
     context.fillStyle = 'white';
     context.fillRect(palaEsquerra.x, palaEsquerra.y, palaEsquerra.amplada, palaEsquerra.alçada);
     context.fillRect(palaDreta.x, palaDreta.y, palaDreta.amplada, palaDreta.alçada);
 
+    // Movemos las paletas en función de las teclas presionadas
+    // Nota: este código debería estar fuera de la función loop para evitar que se agreguen múltiples oyentes cada vez que se llama la función
+    document.addEventListener('keydown', function (event) {
+      if (event.code === 'KeyW') {
+        palaEsquerra.dy = -paddleSpeed;
+      } else if (event.code === 'KeyS') {
+        palaEsquerra.dy = paddleSpeed;
+      } else if (event.code === 'ArrowUp') {
+        palaDreta.dy = -paddleSpeed;
+      } else if (event.code === 'ArrowDown') {
+        palaDreta.dy = paddleSpeed;
+      }
+    });
+
+    document.addEventListener('keyup', function (event) {
+      if (event.code === 'KeyW' || event.code === 'KeyS') {
+        palaEsquerra.dy = 0;
+      } else if (event.code === 'ArrowUp' || event.code === 'ArrowDown') {
+        palaDreta.dy = 0;
+      }
+    });
+
+// Movemos las paletas en función de su velocidad actual
+    palaEsquerra.y += palaEsquerra.dy;
+    palaDreta.y += palaDreta.dy;
+
+// Verificamos que las paletas no se salgan de los límites del canvas
+    palaEsquerra.y = Math.max(Math.min(palaEsquerra.y, maximPalaY), graella);
+    palaDreta.y = Math.max(Math.min(palaDreta.y, maximPalaY), graella);
+
+// Dibujamos la pelota en su posición actual
+    context.fillRect(pilota.x, pilota.y, pilota.amplada, pilota.alçada);
+
+// Movemos la pelota en función de su velocidad actual
     pilota.x += pilota.dx;
     pilota.y += pilota.dy;
 
-    if (pilota.y < graella) {
-      pilota.y = graella;
-      pilota.dy *= -1;
-    }
-    else if (pilota.y + graella > canvas.height - graella) {
-      pilota.y = canvas.height - graella * 2;
-      pilota.dy *= -1;
+// Verificamos si la pelota colisiona con una de las paletas
+    if (collides(pilota, palaEsquerra) || collides(pilota, palaDreta)) {
+      // Invertimos la dirección en x y aumentamos ligeramente la velocidad
+      pilota.dx = -pilota.dx * 1.03;
     }
 
-    if ( (pilota.x < 0 || pilota.x > canvas.width) && !pilota.reset) {
-      pilota.reset = true;
-
-      setTimeout(() => {
-        pilota.reset = false;
-        pilota.x = canvas.width / 2;
-        pilota.y = canvas.height / 2;
-      }, 400);
+// Verificamos si la pelota ha chocado contra las paredes superior o inferior
+    if (pilota.y < graella || pilota.y + pilota.alçada > canvas.height - graella) {
+      // Invertimos la dirección en y
+      pilota.dy = -pilota.dy;
     }
 
-    if (collides(pilota, palaEsquerra)) {
-      pilota.dx *= -1;
-
-      pilota.x = palaEsquerra.x + palaEsquerra.amplada;
-    }
-    else if (collides(pilota, palaDreta)) {
-      pilota.dx *= -1;
-
-      pilota.x = palaDreta.x - pilota.amplada;
+// Verificamos si la pelota ha salido del canvas por la izquierda o la derecha
+    if (pilota.x < -pilota.amplada || pilota.x > canvas.width) {
+      // La pelota ha salido del canvas, así que la volvemos a colocar en el centro y cambiamos ligeramente su velocidad
+      pilota.x = canvas.width / 2;
+      pilota.y = canvas.height / 2;
+      pilota.dx = velocitatPilota;
+      pilota.dy = -velocitatPilota;
     }
 
-    context.fillRect(pilota.x, pilota.y, pilota.amplada, pilota.alçada);
-
+// Definimos el campo de juego
     context.fillStyle = 'lightgrey';
     context.fillRect(0, 0, canvas.width, graella);
     context.fillRect(0, canvas.height - graella, canvas.width, canvas.height);
-
     for (let i = graella; i < canvas.height - graella; i += graella * 2) {
       context.fillRect(canvas.width / 2 - graella / 2, i, graella, graella);
     }
 
+// Pedimos al navegador que repita el loop en el siguiente fotograma
+    requestAnimationFrame(loop);
   }
-
-  requestAnimationFrame(loop);
+  loop();
 </script>
 </body>
 </html>
