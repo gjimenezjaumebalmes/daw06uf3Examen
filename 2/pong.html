@@ -70,9 +70,7 @@
             obj1.y + obj1.alçada > obj2.y;
   }
 
-  // Función que se llama en cada fotograma para dibujar los elementos y actualizar la posición de las paletas
   function loop() {
-    // Borramos todo el contenido del canvas antes de dibujar el nuevo fotograma
     context.clearRect(0, 0, canvas.width, canvas.height);
 
     // Dibujamos las dos paletas en sus posiciones actuales
@@ -81,7 +79,6 @@
     context.fillRect(palaDreta.x, palaDreta.y, palaDreta.amplada, palaDreta.alçada);
 
     // Movemos las paletas en función de las teclas presionadas
-    // Nota: este código debería estar fuera de la función loop para evitar que se agreguen múltiples oyentes cada vez que se llama la función
     document.addEventListener('keydown', function (event) {
       if (event.code === 'KeyW') {
         palaEsquerra.dy = -paddleSpeed;
@@ -146,7 +143,6 @@
       context.fillRect(canvas.width / 2 - graella / 2, i, graella, graella);
     }
 
-// Pedimos al navegador que repita el loop en el siguiente fotograma
     requestAnimationFrame(loop);
   }
   loop();
