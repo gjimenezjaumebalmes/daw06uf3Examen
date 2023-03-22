@@ -108,5 +108,3 @@ export function loop() {
     }
 
 }
-
-export { canvas,context,graella,alçadaPala,maximPalaY,palaEsquerra,velocitatPilota,palaDreta,paddleSpeed as all };

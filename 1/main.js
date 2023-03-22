@@ -1,4 +1,5 @@
 import { all } from "pong.js";
+import { canvas, context, graella, alçadaPala, maximPalaY, paddleSpeed, velocitatPilota, palaEsquerra, palaDreta, pilota, collides, loop } from './pong.js';
 import "pong.js";
 // import canvas from "pong.js";
 // import context from "pong.js";
@@ -11,7 +12,7 @@ import "pong.js";
 // import paddleSpeed from "pong.js";
 // import pilota from "pong.js";
 
-collides(obj1, obj2);
+collides();
 loop();
 requestAnimationFrame(loop);
 
