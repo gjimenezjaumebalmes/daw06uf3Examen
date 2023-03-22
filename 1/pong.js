@@ -1,14 +1,13 @@
-export { canvas,context,graella,alçadaPala,maximPalaY,palaEsquerra,velocitatPilota,palaDreta,paddleSpeed as all };
-let canvas = document.getElementById('joc');
-let context = canvas.getContext('2d');
-let graella = 15;
-let alçadaPala = graella * 5;
-let maximPalaY = canvas.height - graella - alçadaPala;
+export let canvas = document.getElementById('joc');
+export let context = canvas.getContext('2d');
+export let graella = 15;
+export let alçadaPala = graella * 5;
+export let maximPalaY = canvas.height - graella - alçadaPala;
 
-var paddleSpeed = 6;
-var velocitatPilota = 5;
+export var paddleSpeed = 6;
+export var velocitatPilota = 5;
 
-let palaEsquerra = {
+export let palaEsquerra = {
     x: graella * 2,
     y: canvas.height / 2 - alçadaPala / 2,
     amplada: graella,
@@ -16,14 +15,14 @@ let palaEsquerra = {
 };
 
 
-let palaDreta = {
+export let palaDreta = {
     x: canvas.width - graella * 3,
     y: canvas.height / 2 - alçadaPala / 2,
     amplada: graella,
     alçada: alçadaPala,
 };
 
-let pilota = {
+export let pilota = {
     x: canvas.width / 2,
     y: canvas.height / 2,
     amplada: graella,
@@ -110,5 +109,13 @@ function loop() {
 
 }
 
-export default class collides {
+
+export function collides(){
+
 }
+
+export function loop(){
+
+}
+
+export { canvas,context,graella,alçadaPala,maximPalaY,palaEsquerra,velocitatPilota,palaDreta,paddleSpeed as all };
